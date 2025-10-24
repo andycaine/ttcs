@@ -15,7 +15,7 @@ templates/application-v$(VERSION).yaml: $(PYTHON_FILES) $(TEMPLATE_DIR)
 	uv run python -m ttcs.application > $@
 
 test: templates/network-v$(VERSION).yaml templates/data-v$(VERSION).yaml templates/application-v$(VERSION).yaml
-	cfn-lint templates/*
+	uv run cfn-lint templates/*
 
 build: test
 
