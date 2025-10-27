@@ -349,9 +349,13 @@ class Vpc:
         public_subnet_ingress: list[tuple[str | Ref, AWSHelperFn | str]] = [
             ("80", "0.0.0.0/0"),
             ("443", "0.0.0.0/0"),
+            ("587", "0.0.0.0/0"),
+            ("1024-65535", "0.0.0.0/0"),
         ]
         public_subnet_egress: list[tuple[str | Ref, AWSHelperFn | str]] = [
             ("1024-65535", "0.0.0.0/0"),
+            ("443", "0.0.0.0/0"),
+            ("587", "0.0.0.0/0"),
         ]
         for subnet in self.app_subnets:
             public_subnet_ingress.append(
@@ -394,6 +398,7 @@ class Vpc:
         ]
         app_subnet_egress: list[tuple[str | Ref, AWSHelperFn | str]] = [
             ("443", "0.0.0.0/0"),
+            ("587", "0.0.0.0/0"),
         ]
         for subnet in self.public_subnets:
             app_subnet_ingress.append(("80", GetAtt(subnet.subnet, "CidrBlock")))

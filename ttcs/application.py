@@ -318,6 +318,28 @@ class EcsCluster:
         )
         t.add_resource(
             ec2.SecurityGroupEgress(
+                "WebAppToInternetHttpsEgress",
+                Description="Allow web app access to internet",
+                GroupId=Ref(web_app_sg),
+                IpProtocol="tcp",
+                FromPort=443,
+                ToPort=443,
+                CidrIp="0.0.0.0/0",
+            )
+        )
+        t.add_resource(
+            ec2.SecurityGroupEgress(
+                "WebAppToInternetSMTPEgress",
+                Description="Email via TLS and smtp",
+                GroupId=Ref(web_app_sg),
+                IpProtocol="tcp",
+                FromPort=587,
+                ToPort=587,
+                CidrIp="0.0.0.0/0",
+            )
+        )
+        t.add_resource(
+            ec2.SecurityGroupEgress(
                 "WebAppToDbEgress",
                 Description="Allow web app access to DB",
                 GroupId=Ref(web_app_sg),
