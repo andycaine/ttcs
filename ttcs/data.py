@@ -2,7 +2,6 @@ from dataclasses import dataclass
 from troposphere import (
     AWSHelperFn,
     Equals,
-    Condition,
     If,
     Template,
     Ref,
@@ -45,6 +44,12 @@ class FileSystem:
                 ],
                 ThroughputMode="bursting",
                 BackupPolicy=efs.BackupPolicy(Status="ENABLED"),
+                Tags=[
+                    {"Key": "aws-control-tower-backuphourly", "Value": "true"},
+                    {"Key": "aws-control-tower-backupdaily", "Value": "true"},
+                    {"Key": "aws-control-tower-backupweekly", "Value": "true"},
+                    {"Key": "aws-control-tower-backupmonthly", "Value": "true"},
+                ],
             )
         )
 
@@ -160,7 +165,13 @@ class DbInstance:
             PubliclyAccessible=False,
             EnableCloudwatchLogsExports=["error"],
             StorageEncrypted=True,
-            Tags=[{"Key": "workload-type", "Value": "production"}],
+            Tags=[
+                {"Key": "workload-type", "Value": "production"},
+                {"Key": "aws-control-tower-backuphourly", "Value": "true"},
+                {"Key": "aws-control-tower-backupdaily", "Value": "true"},
+                {"Key": "aws-control-tower-backupweekly", "Value": "true"},
+                {"Key": "aws-control-tower-backupmonthly", "Value": "true"},
+            ],
         )
         if self.restore:
             db_snapshot_param = t.add_parameter(
