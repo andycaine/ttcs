@@ -44,12 +44,12 @@ class FileSystem:
                 ],
                 ThroughputMode="bursting",
                 BackupPolicy=efs.BackupPolicy(Status="ENABLED"),
-                FileSystemTags=[
-                    {"Key": "aws-control-tower-backuphourly", "Value": "true"},
-                    {"Key": "aws-control-tower-backupdaily", "Value": "true"},
-                    {"Key": "aws-control-tower-backupweekly", "Value": "true"},
-                    {"Key": "aws-control-tower-backupmonthly", "Value": "true"},
-                ],
+                FileSystemTags=efs.Tags(
+                    {"aws-control-tower-backuphourly": "true"},
+                    {"aws-control-tower-backupdaily": "true"},
+                    {"aws-control-tower-backupweekly": "true"},
+                    {"aws-control-tower-backupmonthly": "true"},
+                ),
             )
         )
 
