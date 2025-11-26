@@ -229,6 +229,13 @@ class DbInstance:
                 Description="DB instance name",
             )
         )
+        t.add_output(
+            Output(
+                "DbSubnetGroupName",
+                Value=Ref(db_subnet_group),
+                Description="DB subnet group name",
+            )
+        )
 
         return t
 
