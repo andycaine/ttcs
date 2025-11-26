@@ -1,7 +1,9 @@
 from dataclasses import dataclass
 from troposphere import (
     AWSHelperFn,
+    Condition,
     Equals,
+    Not,
     If,
     Template,
     Ref,
@@ -179,9 +181,15 @@ class DbInstance:
                     "DBSnapshotIdentifier",
                     Type="String",
                     Description="DB snapshot identifier",
+                    Default="",
                 )
             )
+            t.add_condition(
+                name="CreateRds",
+                condition=Not(Equals(Ref(db_snapshot_param), "")),
+            )
             kwargs["DBSnapshotIdentifier"] = Ref(db_snapshot_param)
+            kwargs["Condition"] = "CreateRds"
         else:
             db_name_param = t.add_parameter(
                 Parameter("DBName", Type="String", Description="DB name")
@@ -208,6 +216,7 @@ class DbInstance:
         t.add_output(
             Output(
                 "DbEndpointAddress",
+                Condition="CreateRds",
                 Value=GetAtt(db, "Endpoint.Address"),
                 Description="DB endpoint address",
             )
@@ -215,6 +224,7 @@ class DbInstance:
         t.add_output(
             Output(
                 "DbInstanceName",
+                Condition="CreateRds",
                 Value=Ref(db),
                 Description="DB instance name",
             )
